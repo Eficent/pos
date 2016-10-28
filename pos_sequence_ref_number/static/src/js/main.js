@@ -7,6 +7,7 @@
     'use strict';
 
     openerp.pos_sequence_ref_number = function (instance) {
+		var numerototal=" ";
         var _t = instance.web._t,
             _lt = instance.web._lt;
         var QWeb = instance.web.qweb;
@@ -33,11 +34,30 @@
                 }
                 return n;
             }
-            var num = seq.number_next_actual;
+		  
+			var num = seq.number_next_actual;
+			//Guardamos en la local storage el Número de la secuencia de manera que posteriormente lo podamos comparar con el actual
+             if(num<localStorage.getItem("proximonumero")){
+				 seq.number_next_actual=localStorage.getItem("proximonumero");
+				 num = seq.number_next_actual;
+			 }
             var prefix = format(seq.prefix, idict);
             var suffix = format(seq.suffix, idict);
-            seq.number_next_actual += seq.number_increment;
+			if (window.localStorage) {
+			  localStorage.setItem("numeroactual", num);
+				var numeroSecuencialActual = localStorage.getItem("numeroactual");
+				var numero1=parseInt(numeroSecuencialActual);
+				var proximonumero = numero1+1;
+				localStorage.setItem("proximonumero", proximonumero);
+			    var proximonumeroToca = localStorage.getItem("proximonumero");
+				var secuenciaFinal=parseInt(proximonumeroToca);
+			}
+			else {
+			  throw new Error('Tu Browser no soporta LocalStorage!');
+}
 
+			
+            seq.number_next_actual += seq.number_increment;
             return prefix + pad(num, seq.padding) + suffix;
         };
 
@@ -56,8 +76,22 @@
             },
             push_order: function(order) {
                 if (order !== undefined) {
-                    order.set({'sequence_ref_number': this.pos_order_sequence.number_next_actual});
-                    order.set({'sequence_ref': _sequence_next(this.pos_order_sequence)});
+					//Según el número de secuencia  usaremos el actual o el del sotrage de esta manera respetamos siempre el orden
+					if(localStorage.getItem("numeroactual")>this.pos_order_sequence.number_next_actual)
+					{
+						
+						var numeroUp=parseInt(localStorage.getItem("numeroactual"));
+						order.set({'sequence_ref_number': numeroUp});
+						order.set({'sequence_ref': _sequence_next(this.pos_order_sequence)});	
+							
+					}
+					else{
+						
+						order.set({'sequence_ref_number': this.pos_order_sequence.number_next_actual});
+						order.set({'sequence_ref': _sequence_next(this.pos_order_sequence)});	
+						
+					}
+                    
                 }
                 return PosModelParent.prototype.push_order.call(this, order);
             }
