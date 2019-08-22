@@ -32,12 +32,20 @@
             </xpath>
             <!-- Hide obsolete Buttons -->
             <xpath expr="//button[@name='%(point_of_sale.action_pos_box_in)d']" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="groups">pos_cash_move_reason.group_pos_old_actions</attribute>
             </xpath>
             <xpath expr="//button[@name='%(point_of_sale.action_pos_box_out)d']" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="groups">pos_cash_move_reason.group_pos_old_actions</attribute>
             </xpath>
         </field>
+    </record>
+
+    <record id="point_of_sale.action_pos_box_in" model="ir.actions.act_window">
+        <field name="groups_id" eval="[(4, ref('pos_cash_move_reason.group_pos_old_actions'))]"/>
+    </record>
+
+    <record id="point_of_sale.action_pos_box_out" model="ir.actions.act_window">
+        <field name="groups_id" eval="[(4, ref('pos_cash_move_reason.group_pos_old_actions'))]"/>
     </record>
 
 </odoo>

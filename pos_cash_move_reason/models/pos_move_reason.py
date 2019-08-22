@@ -19,7 +19,7 @@ class PosMoveReason(models.Model):
 
     @api.model
     def _default_company_id(self):
-        return False
+        return self.env.user.company_id
 
     name = fields.Char(string='Name', required=True)
 

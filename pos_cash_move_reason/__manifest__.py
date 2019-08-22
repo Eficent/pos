@@ -15,6 +15,7 @@
     ],
     'data': [
         'security/ir_rule.xml',
+        'security/res_groups.xml',
         'security/ir.model.access.csv',
         'views/view_pos_move_reason.xml',
         'views/view_pos_session.xml',
