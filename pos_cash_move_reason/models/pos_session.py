@@ -23,7 +23,7 @@ class PosSession(models.Model):
                 ('company_id', '=', session.config_id.company_id.id)])
             session.display_move_reason_income = len(
                 reasons.filtered(lambda x: x.is_income_reason))
-            session.display_move_reason_out = len(
+            session.display_move_reason_expense = len(
                 reasons.filtered(lambda x: x.is_expense_reason))
 
     def button_move_income(self):
