@@ -85,13 +85,15 @@ class WizardPosMoveReason(models.TransientModel):
         self.ensure_one()
         if self.move_type == 'income':
             account = self.move_reason_id.income_account_id
+            amount = self.amount
         else:
             account = self.move_reason_id.expense_account_id
+            amount = - self.amount
         return {
             'date': fields.Datetime.now(),
             'statement_id': self.statement_id.id,
             'journal_id': self.journal_id.id,
-            'amount': -self.amount,
+            'amount': amount,
             'account_id': account.id,
             'name': self.name,
             'ref': self.session_id.name,
